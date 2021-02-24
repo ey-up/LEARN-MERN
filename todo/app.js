@@ -1,37 +1,37 @@
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const express = require("express");
+const mongodb = require("mongodb");
+const Todo = require("./models/Todo");
+
 const app = express();
 const port = process.env.PORT || 8080;
-const mongodb = require("mongodb");
-const url = "mongodb://localhost:27017";
+const url = "mongodb://localhost:27017/todoApp";
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
+mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology:true,useCreateIndex:true},(err)=>{
+    if(err) throw err;
+    console.log("mongoose is successful")
+})
 
 app.post("/", (req, res) => {
-    mongodb.connect(url,{useNewUrlParser:true,useUnifiedTopology:true},(err,db)=>{
-        if(err) throw err;
-        var dbo = db.db("todo");
-        dbo.collection("list").insertOne({todo:req.body.todo},(err,result)=>{
-            if(err) throw err;
-            res.redirect("http://localhost:8080");
-            
-        })
-    })
+    console.log("oldi")
+    const newTodo = new Todo({
+        todo : req.body.todo
+    },()=>{console.log("oldi")})
+    newTodo.save();
+    res.redirect("http://localhost:8080");
     
 });
 
 app.get("/", (req, res) => {
-    mongodb.connect(url,{useNewUrlParser:true, useUnifiedTopology:true},(err,db)=>{
-        if(err) throw err;
-        var dbo = db.db("todo");
-        dbo.collection("list").find({}).toArray((err,result)=>{
-            if (err) throw err;
-            res.render("index",{data: result})
-            db.close();
-        })
-    })
+    Todo.find(function (err, todos) {
+        if (err) return console.error(err);
+        console.log(todos);
+        res.render("index",{data:todos})
+      })
+  
     
   });
 
