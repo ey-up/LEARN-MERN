@@ -4,12 +4,15 @@ import "./App.css";
 import React, { Component } from "react";
 import List from "./components/List";
 
+
 class App extends Component {
   state = {
     list: [],
     todo: "",
   };
-
+  deneme = () =>{
+    console.log("selam")
+  }
   handleChange = (e) => {
     this.setState({ todo: e.target.value });
     //console.log(this.state); 
@@ -37,7 +40,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="Button">
+          <h1 className="Header">
             <abbr title="Yapmak istediğin şeyleri ekle">Yapılacaklar</abbr>
           </h1>
           <List list={this.state.list} />
@@ -47,13 +50,13 @@ class App extends Component {
             type="text"
             onChange={this.handleChange}
           ></input>
-      
+         
           <datalist id="items">
             <option value="Do homework"></option>
             <option value="Buy a new dress"></option>
             <option value="Do the shopping"></option>
           </datalist>
-          <Button onClick={this.handleSubmit} variant="outline-primary">
+          <Button  onClick={this.handleSubmit} variant="outline-primary">
             Ekle
           </Button>
         </header>
